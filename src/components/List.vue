@@ -2,7 +2,7 @@
   <div>
     <MHeader>列表</MHeader>
     <div class="content">
-      <ul>
+      <ul @click="getId">
         <router-link
           v-for="(book,index) in books"
           :key="index"
@@ -50,6 +50,9 @@
       async _removeBook(id){
         // await removeBook(id);  // 删除后台数据
         this.books = this.books.filter(item => item.bookId !== id);
+      },
+      getId(){
+        // console.log(this.books[1].bookId);
       }
     }
   }

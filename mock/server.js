@@ -71,10 +71,46 @@ http.createServer((req, res) => {
         }
         break;
       case 'POST':
-
+        let str = '';
+        req.on('data',function (chunk) {
+          str += chunk;
+        });
+        req.on('end',()=>{
+          let book = JSON.parse(str);
+          // book.id = 1;
+          read(function (books) {
+            book.bookId = books.length ? books[books.length - 1].bookId + 1 : 1;
+            books.push(book);
+            write(books, function () {
+              res.end(JSON.stringify(book));
+            });
+          });
+        });
         break;
       case 'PUT':
+        if (id) {
+          let str = '';
+          req.on('data', chunk => {
+            str += chunk;
+          });
+          req.on('end',()=>{
+            let book = JSON.parse(str);
+            read(function (books) {
+              books = books.map(item => {
+                if (item.bookId === id) {  //找到id相同的那一本书
+                  return book;
+                }
+                return item;  //其他书正常返回
+              });
 
+              write(books, function () {   //将数据写回json文件中
+                res.end(JSON.stringify(book));
+              });
+            });
+
+
+          });
+        }
         break;
       case 'DELETE':
         read(books => {

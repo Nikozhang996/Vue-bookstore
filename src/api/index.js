@@ -23,6 +23,10 @@ export const getAllBooks = () => {
   return axios.get('./book');
 };
 
+export const getAll = () => {
+  return axios.all([getSliders(), getHotBooks()]);
+};
+
 // 删除某一本图书
 export const removeBook = (id) => {
   return axios.delete(`./book?id=${id}`);
@@ -41,4 +45,9 @@ export const updataBook = (id, data) => {
 // 添加图书
 export const addBook = (data) => {
   return axios.post(`./book`,data);
+};
+
+// 返回
+export const pagination = (offset) => {
+  return axios.get(`/page?offset=${offset}`);
 };

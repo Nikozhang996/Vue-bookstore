@@ -19,6 +19,9 @@ function write (data, cb) {
   fs.writeFile('./books.json', JSON.stringify(data), cb);
 }
 
+// 加载页面的长度
+let pageSize = 5;
+
 http.createServer((req, res) => {
   // 设置跨域头
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -31,6 +34,23 @@ http.createServer((req, res) => {
   ;
 
   let {pathname, query} = url.parse(req.url, true);
+
+  if (pathname === '/page') {
+    let offset = parseInt(query.offset,10) || 0;
+    read(function (books) {
+      let result = books.reverse().slice(offset, offset + pageSize);
+      let hasMore = true;
+      if (books.length<=offset+pageSize) {
+        hasMore = false;
+      }
+
+      res.setHeader('Content-Type', 'application/json;charset=utf8');
+      setTimeout(()=>{
+        res.end(JSON.stringify({hasMore, books: result}));
+      },1000)
+    });
+    return;
+  }
 
   // 返回轮播图数据
   if (pathname === '/sliders') {

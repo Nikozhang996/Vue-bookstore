@@ -2,19 +2,21 @@
   <div id="home">
     <my-header :back="true">首页</my-header>
     <div class="content">
-      <swiper :swiperSlides="sliders"></swiper>
-      <div class="container">
-        <h3>热门图书</h3>
-        <ul>
-          <li v-for="(book,index) in hotBooks" :key="index">
-            <div>
-              <img :src="book.bookCover" alt="">
-              <span class="book-price">{{book.bookName}}</span>
-            </div>
-          </li>
-        </ul>
-      </div>
-
+      <loading v-if="loading">疯狂加载中……</loading>
+      <template v-else="loading">
+        <swiper :swiperSlides="sliders"></swiper>
+        <div class="container">
+          <h3>热门图书</h3>
+          <ul>
+            <li v-for="(book,index) in hotBooks" :key="index">
+              <div>
+                <img :src="book.bookCover" alt="">
+                <span class="book-price">{{book.bookName}}</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </template>
     </div>
   </div>
 </template>
@@ -22,25 +24,27 @@
 <script>
   import MHeader from '../base/MHeader';
   import Swiper from '../base/Swiper';
-  import {getSliders, getHotBooks} from "../api";
+  import Loading from '../base/Loading';
+  import {getSliders, getHotBooks, getAll} from "../api";
 
   export default {
     name: "home",
     components: {
       MyHeader: MHeader,
-      Swiper
+      Swiper,
+      Loading
     },
     data () {
       return {
+        loading: true,
         sliders: [],
         hotBooks: []
-      }
+      };
     },
 
     /*async和await配合，await必须返回一个Promise对象*/
     created () {
-      this._getSliders();
-      this._getHotBooks();
+      this._getAllData();
     },
     methods: {
       async _getSliders () {
@@ -49,6 +53,13 @@
       },
       async _getHotBooks () {
         this.hotBooks = await getHotBooks();
+      },
+      async _getAllData () {
+        let [sliders, hotBooks] = await getAll();
+        this.sliders = sliders;
+        this.hotBooks = hotBooks;
+
+        this.loading = false;
       }
     }
   };

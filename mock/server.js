@@ -36,18 +36,16 @@ http.createServer((req, res) => {
   let {pathname, query} = url.parse(req.url, true);
 
   if (pathname === '/page') {
-    let offset = parseInt(query.offset,10) || 0;
+    let offset = parseInt(query.offset, 10) || 0;
     read(function (books) {
       let result = books.reverse().slice(offset, offset + pageSize);
       let hasMore = true;
-      if (books.length<=offset+pageSize) {
+      if (books.length <= offset + pageSize) {
         hasMore = false;
       }
 
       res.setHeader('Content-Type', 'application/json;charset=utf8');
-      setTimeout(()=>{
-        res.end(JSON.stringify({hasMore, books: result}));
-      },1000)
+      res.end(JSON.stringify({hasMore, books: result}));
     });
     return;
   }
@@ -92,10 +90,10 @@ http.createServer((req, res) => {
         break;
       case 'POST':
         let str = '';
-        req.on('data',function (chunk) {
+        req.on('data', function (chunk) {
           str += chunk;
         });
-        req.on('end',()=>{
+        req.on('end', () => {
           let book = JSON.parse(str);
           // book.id = 1;
           read(function (books) {
@@ -113,7 +111,7 @@ http.createServer((req, res) => {
           req.on('data', chunk => {
             str += chunk;
           });
-          req.on('end',()=>{
+          req.on('end', () => {
             let book = JSON.parse(str);
             read(function (books) {
               books = books.map(item => {
@@ -139,7 +137,6 @@ http.createServer((req, res) => {
             res.end(JSON.stringify({}));
           });
         });
-
     }
   }
 }).listen(3000);

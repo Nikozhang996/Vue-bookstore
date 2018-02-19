@@ -13,7 +13,7 @@
             }
           }"
           tag="li">
-          <img :src="book.bookCover" alt="">
+          <img v-lazy="book.bookCover">
           <div>
             <h4>{{book.bookName}}</h4>
             <p>{{book.bookInfo}}</p>

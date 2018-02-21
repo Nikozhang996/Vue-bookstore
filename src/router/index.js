@@ -26,23 +26,33 @@ export default new Router({
       path: '/home',
       component: () => import('../components/Home.vue'),
       meta: {
-        keepalive: true
+        keepalive: true,
+        title: '首页'
       }
     },
     {
       name: 'List',
       path: '/List',
-      component: () => import('../components/List.vue')
+      component: () => import('../components/List.vue'),
+      meta: {
+        title: '列表'
+      }
     },
     {
       name: 'add',
       path: '/add',
-      component: () => import('../components/Add.vue')
+      component: () => import('../components/Add.vue'),
+      meta: {
+        title: '添加'
+      }
     },
     {
       name: 'collect',
       path: '/collect',
-      component: () => import('../components/Collect.vue')
+      component: () => import('../components/Collect.vue'),
+      meta: {
+        title: '收藏'
+      }
     },
     {
       name: 'detail',

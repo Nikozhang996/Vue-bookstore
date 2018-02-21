@@ -44,6 +44,7 @@
 
     /*async和await配合，await必须返回一个Promise对象*/
     created () {
+
       this._getAllData();
     },
     methods: {

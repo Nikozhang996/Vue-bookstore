@@ -16,6 +16,13 @@ Vue.use(VueLazyload,{
   attempt: 1
 });
 
+/*在进入路由之前，每一次都会执行此方法,全局钩子函数*/
+router.beforeEach(function (to, from, next) {
+  document.title = to.meta.title;
+  next();
+  console.log(to);
+});
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

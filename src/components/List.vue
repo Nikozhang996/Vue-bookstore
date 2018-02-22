@@ -15,11 +15,14 @@
           tag="li">
           <img v-lazy="book.bookCover">
           <div>
-            <h4>{{book.bookName}}</h4>
-            <p>{{book.bookInfo}}</p>
-            <p>{{book.bookPrice}}</p>
+            <h4 class="book-name">{{book.bookName}}</h4>
+            <p class="book-info">{{book.bookInfo}}</p>
+            <p class="book-price">{{book.bookPrice}}</p>
+            <div class="btn-list">
+              <button @click.stop="_removeBook(book.bookId)">删除</button>
+              <button @click.stop="addCart(book)">添加</button>
+            </div>
           </div>
-          <button @click.stop="_removeBook(book.bookId)">删除</button>
         </router-link>
       </ul>
       <loading v-show="isLoading"></loading>
@@ -31,6 +34,7 @@
   import MHeader from '../base/MHeader';
   import Loading from '../base/Loading';
   import {getAllBooks, pagination, removeBook} from "../api";
+  import * as Types from '../store/mutations-type';
 
   export default {
     name: "list",
@@ -53,12 +57,14 @@
       let scroll = this.$refs.scroll;
       let top = scroll.offsetTop;
       let distance = 0;
+      let isMove = false;
       scroll.addEventListener('touchstart', (ev) => {
         if (scroll.scrollTop != 0 || scroll.offsetTop != top) {
           return
         }
         let start = ev.touches[0].pageY;  //手指点击的起始位置
         let move = (ev) => {
+          isMove = true;
           let current = ev.touches[0].pageY;
           distance = current - start;
           if (distance > 0) {
@@ -76,6 +82,12 @@
         };
 
         let end = (ev) => {
+          if(!isMove) {
+            return;
+          }
+          console.log(isMove);
+
+          isMove = false;
           clearInterval(this.scrollTimer);
           this.scrollTimer = setInterval(() => {
             if (distance <= 0) {
@@ -128,9 +140,13 @@
           }
           // console.log(this.$refs.scroll.scrollTop);
         }, 100);
-      }
+      },
+      addCart (book) {
+        this.$store.commit(Types.ADD_CART, book);
+      },
+
     }
-  }
+  };
 </script>
 
 <style scoped lang="less">
@@ -139,8 +155,41 @@
       padding: 10px;
       li {
         display: flex;
+        height: 130px;
+        /*flex-wrap: wrap;*/
+        border-bottom: 1px solid #dddddd;
         img {
-          /*width: 120px;*/
+          height: 120px;
+        }
+        .book-name {
+          font-size: 20px;
+          font-weight: bold;
+          overflow: hidden; /*内容超出后隐藏*/
+          text-overflow: ellipsis; /* 超出内容显示为省略号*/
+          white-space: nowrap; /*文本不进行换行*/
+        }
+        .book-info {
+          /*width: 100%;*/
+          height: 50px;
+          font-size: 14px;
+          color: #666666;
+          overflow: hidden; /*内容超出后隐藏*/
+          text-overflow: ellipsis; /* 超出内容显示为省略号*/
+          /*white-space: nowrap; !*文本不进行换行*!*/
+        }
+        .book-price {
+          color: red;
+        }
+        .btn-list {
+          /*display: flex;*/
+          /*justify-content: space-around;*/
+          button {
+            width: 50px;
+            height: 30px;
+            color: #ffffff;
+            background-color: red;
+            border-radius: 10px;
+          }
         }
       }
     }

@@ -58,6 +58,7 @@
       let top = scroll.offsetTop;
       let distance = 0;
       let isMove = false;
+
       scroll.addEventListener('touchstart', (ev) => {
         if (scroll.scrollTop != 0 || scroll.offsetTop != top) {
           return
@@ -85,7 +86,6 @@
           if(!isMove) {
             return;
           }
-          console.log(isMove);
 
           isMove = false;
           clearInterval(this.scrollTimer);

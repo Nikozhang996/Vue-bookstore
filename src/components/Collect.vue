@@ -4,6 +4,11 @@
     <ul class="content">
       <li v-for="(item,index) in cartList" :key="index">
         <img :src="item.bookCover" alt="">
+        <div>
+          <h4>{{item.bookName}}</h4>
+          <p>{{item.bookPrice}}</p>
+          <p>{{item.bookCount}}</p>
+        </div>
       </li>
     </ul>
   </div>
@@ -22,8 +27,12 @@
       console.log(this.count);
     },
     computed: {
-      ...mapState(['cartList']),
-      ...mapGetters(['count']),
+      ...mapState([
+        'cartList'
+      ]),
+      ...mapGetters([
+        'count'
+      ])
     }
   };
 </script>

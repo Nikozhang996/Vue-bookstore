@@ -4,10 +4,9 @@ import logger from 'vuex/dist/logger';
 
 Vue.use(Vuex);
 
-const state = {cartList: []};
-
-import mutations from './mutations';
+import state from './state';
 import getters from './getters';
+import mutations from './mutations';
 
 export default new Vuex.Store({
   state,

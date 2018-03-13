@@ -14,10 +14,10 @@
           }"
           tag="li">
           <img v-lazy="book.bookCover">
-          <div>
+          <div class="book-content">
             <h4 class="book-name">{{book.bookName}}</h4>
             <p class="book-info">{{book.bookInfo}}</p>
-            <p class="book-price">{{book.bookPrice}}</p>
+            <p class="book-price">{{book.bookPrice | formatMoney(2,'￥')}}</p>
             <div class="btn-list">
               <button @click.stop="_removeBook(book.bookId)">删除</button>
               <button @click.stop="addCart(book)">添加</button>
@@ -156,41 +156,49 @@
       li {
         display: flex;
         height: 130px;
-        /*flex-wrap: wrap;*/
         border-bottom: 1px solid #dddddd;
         img {
           height: 120px;
         }
-        .book-name {
-          font-size: 20px;
-          font-weight: bold;
-          overflow: hidden; /*内容超出后隐藏*/
-          text-overflow: ellipsis; /* 超出内容显示为省略号*/
-          white-space: nowrap; /*文本不进行换行*/
-        }
-        .book-info {
-          /*width: 100%;*/
-          height: 50px;
-          font-size: 14px;
-          color: #666666;
-          overflow: hidden; /*内容超出后隐藏*/
-          text-overflow: ellipsis; /* 超出内容显示为省略号*/
-          /*white-space: nowrap; !*文本不进行换行*!*/
-        }
-        .book-price {
-          color: red;
-        }
-        .btn-list {
-          /*display: flex;*/
-          /*justify-content: space-around;*/
-          button {
-            width: 50px;
-            height: 30px;
-            color: #ffffff;
-            background-color: red;
-            border-radius: 10px;
+        .book-content{
+          .book-name {
+            font-size: 16px;
+            font-weight: bold;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+          }
+          .book-info {
+            height: 50px;
+            overflow: hidden;
+            font-size: 14px;
+            color: #666666;
+            line-height: 16px;
+            margin-bottom: 5px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+          }
+          .book-price {
+            color: red;
+          }
+          .btn-list {
+            display: flex;
+            justify-content: flex-end;
+            button {
+              display: block;
+              width: 44px;
+              height: 22px;
+              font-size: 14px;
+              color: #666666;
+              background-color: #8dffb4;
+              border-radius: 4px;
+              margin-left: 4%;
+            }
           }
         }
+
       }
     }
   }

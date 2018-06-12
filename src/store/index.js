@@ -13,5 +13,7 @@ export default new Vuex.Store({
   mutations,
   getters,
   strict: true,
-  plugins: [logger()]
+  plugins: [
+    logger()
+  ]
 });

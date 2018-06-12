@@ -1,6 +1,6 @@
 import * as Types from './mutations-type';
 
-const mutations = {
+export default {
   [Types.ADD_CART] (state, book) {
     let product = state.cartList.find(item => item.bookId === book.bookId);
     if (product) {
@@ -12,4 +12,3 @@ const mutations = {
     }
   }
 };
-export default mutations;

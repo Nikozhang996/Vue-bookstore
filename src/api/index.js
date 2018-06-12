@@ -47,7 +47,7 @@ export const addBook = (data) => {
   return axios.post(`./book`,data);
 };
 
-// 返回
+// 返回分页
 export const pagination = (offset) => {
   return axios.get(`/page?offset=${offset}`);
 };

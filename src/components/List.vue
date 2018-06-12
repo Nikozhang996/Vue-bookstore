@@ -42,7 +42,7 @@
       MHeader,
       Loading,
     },
-    data () {
+    data() {
       return {
         books: [],
         offset: 0,
@@ -50,71 +50,80 @@
         isLoading: false
       };
     },
-    created () {
+    created() {
       this._getAllBooks();
     },
-    mounted () {
-      let scroll = this.$refs.scroll;
-      let top = scroll.offsetTop;
-      let distance = 0;
-      let isMove = false;
-
-      scroll.addEventListener('touchstart', (ev) => {
-        if (scroll.scrollTop != 0 || scroll.offsetTop != top) {
-          return
-        }
-        let start = ev.touches[0].pageY;  //手指点击的起始位置
-        let move = (ev) => {
-          isMove = true;
-          let current = ev.touches[0].pageY;
-          distance = current - start;
-          if (distance > 0) {
-            if (distance <= 50) {
-              scroll.style.top = distance + top + 'px';
-            } else {
-              distance = 50;
-              scroll.style.top = top + 50 + 'px'
-            }
-          } else {
-            // 如果不在考虑满园内，则移除move和end事件
-            scroll.removeEventListener('touchmove', move);
-            scroll.removeEventListener('touchend', end);
-          }
-        };
-
-        let end = (ev) => {
-          if(!isMove) {
-            return;
-          }
-
-          isMove = false;
-          clearInterval(this.scrollTimer);
-          this.scrollTimer = setInterval(() => {
-            if (distance <= 0) {
-              clearInterval(this.scrollTimer);
-              distance = 0;
-              scroll.style.top = top + 'px';
-              this.books = [];
-              this.books = this._getAllBooks();
-              this.offset = 0;
-              scroll.removeEventListener('touchmove', move);
-              scroll.removeEventListener('touchend', end);
-              return;
-            }
-            distance -= 1;
-            scroll.style.top = top + distance + 'px';
-          }, 10);
-        };
-
-        scroll.addEventListener('touchmove', move);
-        scroll.addEventListener('touchend', end);
-      }, false);
+    mounted() {
+      this.bindDropDownRefreshEvent();
     },
     methods: {
-      moreBook () {
+      /* 下拉刷新事件 */
+      bindDropDownRefreshEvent() {
+        let scroll = this.$refs.scroll;
+        let top = scroll.offsetTop;
+        let distance = 0;
+        const flag = 100;
+        let isMove = false;
+
+        scroll.addEventListener('touchstart', (ev) => {
+          if (scroll.scrollTop != 0 || scroll.offsetTop != top) {
+            return
+          }
+          let start = ev.touches[0].pageY;  //手指点击的起始位置
+          const move = (ev) => {
+            isMove = true;
+            let current = ev.touches[0].pageY;
+
+            distance = current - start;
+
+            console.log(distance);
+
+            if (distance > 0) {
+              if (distance <= flag) {
+                scroll.style.top = distance + top + 'px';
+              } else {
+                distance = flag;
+                scroll.style.top = top + flag + 'px'
+              }
+            } else {
+              // 如果不在考虑满园内，则移除move和end事件
+              scroll.removeEventListener('touchmove', move);
+              scroll.removeEventListener('touchend', end);
+            }
+          };
+
+          let end = (ev) => {
+            if (!isMove) {
+              return;
+            }
+
+            isMove = false;
+            clearInterval(this.scrollTimer);
+            this.scrollTimer = setInterval(() => {
+              if (distance <= 0) {
+                clearInterval(this.scrollTimer);
+                distance = 0;
+                scroll.style.top = top + 'px';
+                this.books = [];
+                this.books = this._getAllBooks();
+                this.offset = 0;
+                scroll.removeEventListener('touchmove', move);
+                scroll.removeEventListener('touchend', end);
+                return;
+              }
+              distance -= 1;
+              scroll.style.top = top + distance + 'px';
+            }, 16);
+          };
+
+          scroll.addEventListener('touchmove', move);
+          scroll.addEventListener('touchend', end);
+        }, false);
+      },
+      moreBook() {
         this._getAllBooks();
       },
-      async _getAllBooks () {
+      async _getAllBooks() {
         if (this.hasMore && !this.isLoading) {   //防止用户多次点击改善多次请求
           this.isLoading = true;
           let {hasMore, books} = await pagination(this.offset);
@@ -124,11 +133,11 @@
           this.isLoading = false;
         }
       },
-      async _removeBook (id) {
+      async _removeBook(id) {
         // await removeBook(id);  // 删除后台数据
         this.books = this.books.filter(item => item.bookId !== id);
       },
-      loadMore () {
+      loadMore() {
         /*
         * 此处需要函数节流思想，防止多次出发事件导致性能消耗
         * */
@@ -138,10 +147,9 @@
           if (scrollTop + clientHeight + 20 > scrollHeight) {
             this._getAllBooks();
           }
-          // console.log(this.$refs.scroll.scrollTop);
         }, 100);
       },
-      addCart (book) {
+      addCart(book) {
         this.$store.commit(Types.ADD_CART, book);
       },
 
@@ -153,7 +161,7 @@
   .content {
     ul {
       padding: 10px;
-      li+li{
+      li + li {
         border-top: 1px solid #dddddd;
       }
       li {
@@ -163,7 +171,7 @@
         img {
           height: 120px;
         }
-        .book-content{
+        .book-content {
           .book-name {
             font-size: 16px;
             font-weight: bold;

@@ -1,5 +1,5 @@
 <template>
-  <swiper :options="swiperOption">
+  <swiper :options="swiperOption" @someSwiperEvent="fn">
     <swiper-slide v-for="(slide,index) in swiperSlides" :key="index">
       <img :src="slide" alt="">
     </swiper-slide>
@@ -13,22 +13,28 @@
     props: ['swiperSlides'],
     data () {
       return {
+        timer: null,
         swiperOption: {
-          autoplay: 3500,
+          autoplay: {
+            delay: 2000
+          },
+          effect: 'coverflow',
           pagination: {
             el: '.swiper-pagination'
           }
-        },
-        // swiperSlides: [1, 2, 3, 4, 5]
+        }
       };
     },
+    methods: {
+      fn() {
+        console.log(this);
+      }
+    },
     mounted () {
-      setInterval(() => {
-      /*  console.log('simulate async data')
-        if (this.swiperSlides.length < 10) {
-          this.swiperSlides.push(this.swiperSlides.length + 1)
-        }*/
-      }, 3000)
+
+    },
+    destroyed() {
+
     }
   };
 </script>

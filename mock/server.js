@@ -5,7 +5,7 @@ let url = require('url');
 // 获取轮播图数据
 let sliders = require('./sliders');
 
-function read (cb) {
+function readBook (cb) {
   fs.readFile('./books.json', 'utf8', function (err, data) {
     if (err || data.length == 0) {
       cb([]); //如果没有数据，则让数据变成空数组
@@ -37,7 +37,7 @@ http.createServer((req, res) => {
 
   if (pathname === '/page') {
     let offset = parseInt(query.offset, 10) || 0;
-    read(function (books) {
+    readBook(function (books) {
       let result = books.reverse().slice(offset, offset + pageSize);
       let hasMore = true;
       if (books.length <= offset + pageSize) {
@@ -59,7 +59,7 @@ http.createServer((req, res) => {
 
   // 返回热门图书数据
   if (pathname === '/hot') {
-    read(function (books) {
+    readBook(function (books) {
       res.setHeader('Content-Type', 'application/json;charset=utf8');
       let hot = books.reverse().slice(0, 6);
       res.end(JSON.stringify(hot));
@@ -73,7 +73,7 @@ http.createServer((req, res) => {
     switch (req.method) {
       case 'GET':
         if (id) {
-          read(books => {
+          readBook(books => {
             let book = books.find(item => item.bookId === id);
             if (!book) {
               book = {};
@@ -82,7 +82,7 @@ http.createServer((req, res) => {
             res.end(JSON.stringify(book));
           });
         } else {
-          read(function (books) {
+          readBook(function (books) {
             res.setHeader('Content-Type', 'application/json;charset=utf8');
             res.end(JSON.stringify(books.reverse()));
           })
@@ -96,7 +96,7 @@ http.createServer((req, res) => {
         req.on('end', () => {
           let book = JSON.parse(str);
           // book.id = 1;
-          read(function (books) {
+          readBook(function (books) {
             book.bookId = books.length ? books[books.length - 1].bookId + 1 : 1;
             books.push(book);
             write(books, function () {
@@ -113,7 +113,7 @@ http.createServer((req, res) => {
           });
           req.on('end', () => {
             let book = JSON.parse(str);
-            read(function (books) {
+            readBook(function (books) {
               books = books.map(item => {
                 if (item.bookId === id) {  //找到id相同的那一本书
                   return book;
@@ -131,7 +131,7 @@ http.createServer((req, res) => {
         }
         break;
       case 'DELETE':
-        read(books => {
+        readBook(books => {
           books = books.filter(item => item.bookId !== id)
           write(books, function () {
             res.end(JSON.stringify({}));

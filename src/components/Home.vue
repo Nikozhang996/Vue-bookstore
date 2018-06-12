@@ -1,10 +1,13 @@
 <template>
   <div id="home">
     <my-header :back="true">首页</my-header>
+
     <div class="content">
       <loading v-if="loading">疯狂加载中……</loading>
+
       <template v-else="loading">
         <swiper :swiperSlides="sliders"></swiper>
+
         <div class="container">
           <h3>热门图书</h3>
           <ul>

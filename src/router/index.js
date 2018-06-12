@@ -2,14 +2,6 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 Vue.use(Router);
-/*
-import Home from '../components/Home';
-import List from '../components/List';
-import Detail from '../components/Detail';
-import Add from '../components/Add';
-import Collect from '../components/Collect';
-*/
-
 
 export default new Router({
   routes: [

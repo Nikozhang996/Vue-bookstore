@@ -153,10 +153,13 @@
   .content {
     ul {
       padding: 10px;
+      li+li{
+        border-top: 1px solid #dddddd;
+      }
       li {
         display: flex;
         height: 130px;
-        border-bottom: 1px solid #dddddd;
+        padding: 10px 0;
         img {
           height: 120px;
         }

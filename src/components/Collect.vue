@@ -25,8 +25,8 @@
     components: {
       MHeader
     },
-    mounted () {
-      // console.log(this.count);
+    mounted() {
+      console.log(this.count);
     },
     computed: {
       ...mapState([
@@ -42,11 +42,13 @@
 <style scoped lang="less">
   .content {
     padding: 10px;
-
+    li + li {
+      border-top: 1px solid #dddddd;
+    }
     li {
       display: flex;
       height: 90px;
-      border-bottom: 1px solid #dddddd;
+      padding: 10px 0;
       img {
         height: 80px;
       }
@@ -54,9 +56,6 @@
       .book-content {
         width: 66%;
         min-height: 80px;
-        /*position: absolute;*/
-
-
         .book-name {
           font-size: 16px;
           font-weight: bold;
@@ -72,7 +71,7 @@
           .book-price {
             color: red;
           }
-          .book-count{
+          .book-count {
             color: #67cf22;
           }
         }
